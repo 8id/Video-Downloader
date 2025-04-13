@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlTag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">تحميل الفيديوهات</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+</head>
+<body>
+    <div class="container">
+        <h1 data-i18n="heading">أهلاً وسهلاً بك بصفحة تحميل الفيديوهات</h1>
+        <p class="description" data-i18n="description">حمّل فيديوهاتك المفضلة من يوتيوب، إنستغرام، تيك توك، وفيسبوك بسهولة وسرعة!</p>
+        <form id="previewForm">
+            <div class="input-container">
+                <input type="text" id="videoUrl" name="url" placeholder="أدخل الرابط هنا" required data-i18n="placeholder.url">
+                <button type="button" id="pasteButton"><i class="fas fa-paste"></i> <span data-i18n="paste">لصق</span></button>
+            </div>
+            <div class="options">
+                <button type="button" id="autoButton" data-mode="auto"><i class="fas fa-star"></i> <span data-i18n="auto">تلقائي</span></button>
+                <button type="button" id="audioButton" data-mode="audio"><i class="fas fa-music"></i> <span data-i18n="audio">صوت فقط</span></button>
+                <button type="button" id="trimButton" data-mode="trim"><i class="fas fa-cut"></i> <span data-i18n="trim">جزء من الفيديو/الصوت</span></button>
+                <button type="submit" id="previewButton" disabled data-i18n="preview">معاينة</button>
+            </div>
+            <input type="hidden" name="mode" id="selectedMode">
+        </form>
+
+        <div id="loading" style="display: none;">
+            <p data-i18n="loading.preview">جاري المعاينة، يرجى التحلي بالصبر...</p>
+        </div>
+
+        <div id="preview" style="display: none;">
+            <h3 id="videoTitle"></h3>
+            <img id="thumbnail" src="" alt="صورة مصغرة" style="max-width: 100%;">
+            <p><span data-i18n="duration">المدة</span>: <span id="duration"></span> <span id="minutes" data-i18n="minutes">دقيقة</span></p>
+            <div id="trimTypeSelection" style="display: none;" class="options">
+                <button type="button" id="trimVideoButton" data-trim-type="video"><i class="fas fa-video"></i> <span data-i18n="trim.video">فيديو</span></button>
+                <button type="button" id="trimAudioButton" data-trim-type="audio"><i class="fas fa-music"></i> <span data-i18n="trim.audio">صوت</span></button>
+            </div>
+            <form id="downloadForm">
+                <input type="hidden" name="url" id="downloadUrl">
+                <input type="hidden" name="quality" id="selectedQuality">
+                <input type="hidden" name="audio_only" id="audioOnly" value="false">
+                <input type="hidden" name="mode" id="downloadMode">
+                <input type="hidden" name="trim_type" id="trimType" value="">
+                <label data-i18n="quality.select">اختر الجودة:</label>
+                <div class="quality-container">
+                    <div id="qualityOptions" class="quality-options"></div>
+                    <div class="trim-container" id="trimContainer" style="display: none;">
+                        <label data-i18n="trim.start">وقت البداية (دقائق:ثواني):</label>
+                        <input type="text" name="start_time" id="startTime" value="00:00" placeholder="MM:SS">
+                        <label data-i18n="trim.end">وقت النهاية (دقائق:ثواني):</label>
+                        <input type="text" name="end_time" id="endTime" placeholder="MM:SS">
+                    </div>
+                    <button type="submit" id="downloadButton" disabled><i class="fa fa-arrow-alt-circle-down"></i> <span data-i18n="download">تحميل</span></button>
+                </div>
+            </form>
+        </div>
+
+        <div class="overlay" id="overlay"></div>
+        <div id="successPopup" class="popup">
+            <div class="icon"><i class="fas fa-check-circle"></i></div>
+            <p id="successMessage"></p>
+            <button onclick="closePopup()" data-i18n="ok">موافق</button>
+        </div>
+
+        <div id="errorPopup" class="popup error">
+            <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <p id="errorMessage"></p>
+            <button onclick="closeErrorPopup()" data-i18n="ok">موافق</button>
+        </div>
+
+        <button class="theme-toggle" id="themeToggle">☀️</button>
+        <button id="languageButton">English</button>
+    </div>
+
+    <footer class="copyright" data-i18n="copyright">
+        © 2025 جميع الحقوق محفوظة لـ حسان ضعيف
+    </footer>
+
+    <div class="loading-message" id="loadingMessage" style="display: none;">
+        <div class="loading-content">
+            <i class="fas fa-hourglass-half fa-spin"></i>
+            <span data-i18n="loading.download">جاري التحميل، يرجى التحلي بالصبر... ولا تنسى الاستغفار</span>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
